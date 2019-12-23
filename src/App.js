@@ -1,26 +1,39 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import axios from "axios";
+import "./App.css";
 
-function App() {
+const App = () => {
+  const onClick = () => {
+    var data = new FormData();
+    data.append("referenceNumber", "D070B46E-0000-C012-B6C0-A145186995AC");
+    data.append("correspondenceType", "customer");
+    data.append("isRestrict", true);
+    data.append("description", "test file upload");
+    data.append("bochenFile", document.getElementById("file").files[0]);
+
+    const config = {
+      headers: { "content-type": "multipart/form-data" }
+    };
+    axios
+      .post("http://localhost:3001/upload", data, config)
+      .then(function(res) {
+        alert("success");
+      })
+      .catch(function(err) {
+        alert("fail");
+      });
+  };
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <form onSubmit={() => false}>
+      <div>
+        <label htmlFor="file">File</label>
+        <input id="file" type="file" />
+      </div>
+      <button id="upload" type="button" onClick={onClick}>
+        Upload
+      </button>
+    </form>
   );
-}
+};
 
 export default App;
